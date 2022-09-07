@@ -1,0 +1,15 @@
+---
+- name: Un Deploy web servers on VM1 and VM2
+  hosts: webservers
+  #remote_user: ec2-user
+  become: yes
+  tasks:
+  - name: Stop httpd
+    service:
+           name: httpd
+           enabled: false
+           state: stopped
+  - name: remove webservers from VM2 and VM 3
+    dnf:
+          name: httpd
+          state: absent
