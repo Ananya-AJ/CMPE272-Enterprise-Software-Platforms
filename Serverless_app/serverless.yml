@@ -1,0 +1,21 @@
+
+service: SERVERLESSAPP
+
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: python3.8
+  versionFunctions: False
+  memorySize: 128
+  region: us-east-1
+
+functions:
+  Text:
+    handler: handler.Text
+    events:
+      - http:
+          path: /Text
+          method: get
+          
+
