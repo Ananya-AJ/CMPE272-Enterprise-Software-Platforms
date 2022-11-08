@@ -1,0 +1,52 @@
+git clone https://bitbucket.org/stefanholek/pki-example-1
+
+openssl req -new \
+    -config etc/root-ca.conf \
+    -out ca/root-ca.csr \
+    -keyout ca/root-ca/private/root-ca.key
+Generating a 2048 bit RSA private key
+
+
+req -new \
+    -config etc/root-ca.conf \
+    -out ca/root-ca.csr \
+    -keyout ca/root-ca/private/root-ca.key
+
+openssl ca -selfsign \
+    -config etc/root-ca.conf \
+    -in ca/root-ca.csr \
+    -out ca/root-ca.crt \
+    -extensions root_ca_ext
+
+mkdir -p ca/signing-ca/private ca/signing-ca/db crl certs
+chmod 700 ca/signing-ca/private
+cp /dev/null ca/signing-ca/db/signing-ca.db
+cp /dev/null ca/signing-ca/db/signing-ca.db.attr
+echo 01 > ca/signing-ca/db/signing-ca.crt.srl
+echo 01 > ca/signing-ca/db/signing-ca.crl.srl
+
+
+openssl req -new \
+    -config etc/signing-ca.conf \
+    -out ca/signing-ca.csr \
+    -keyout ca/signing-ca/private/signing-ca.key
+
+brew install apache2
+
+SAN=DNS:www.tomcat.apache.org/ \ 
+openssl req -new \
+    -config etc/server.conf \
+    -out certs/tomcat.apache.csr \
+    -keyout certs/tomcat.apache.key
+
+
+openssl ca \                   
+    -config etc/signing-ca.conf \
+    -in certs/apache.tomcat.org.csr \
+    -out certs/apache.tomcat.org.crt \
+    -extensions server_ext              
+Using configuration from etc/signing-ca.conf
+Enter pass phrase for ./ca/signing-ca/private/signing-ca.key:
+Check that the request matches the signature
+Signature ok
+
