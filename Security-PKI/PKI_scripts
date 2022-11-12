@@ -50,3 +50,36 @@ Enter pass phrase for ./ca/signing-ca/private/signing-ca.key:
 Check that the request matches the signature
 Signature ok
 
+
+
+httpd.conf:
+
+ServerName www.simple.org
+<VirtualHost www.simple.org:443>
+DocumentRoot /opt/homebrew/var/www
+ServerName www.simple.org
+SSLEngine ON
+SSLCertificateFile /Users/ananya.aj5gmail.com/pki-example-1/certs/apache.tomcat.org.crt
+SSLCertificateKeyFile /Users/ananya.aj5gmail.com/pki-example-1/certs/apache.tomocat.org.key
+SSLCertificateChainFile /Users/ananya.aj5gmail.com/pki-example-1/ca/root-ca.crt
+</VirtualHost>
+
+
+LoadModule ssl_module lib/httpd/modules/mod_ssl.so
+
+
+Listen 8080
+
+
+
+
+
+
+openssl s_client -CApath /Users/ananya.aj5gmail.com/pki-example-1/ca -connect simple.org:443 -servername www.simple.org
+
+
+
+
+
+
+
